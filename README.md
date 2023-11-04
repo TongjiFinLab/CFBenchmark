@@ -3,11 +3,11 @@
 <h2>📈 CFBenchmark: Chinese Financial Assistant with Large Language Model</h2>
 </div>
 
-<div align="center">
+
 <a href=''><img src='https://img.shields.io/badge/Paper-ArXiv-C71585'></a> 
 <a href=''><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging Face-CFBenchmark-red'></a>  
 <a href=''><img src='https://img.shields.io/badge/License-Apache--2.0-blue.svg'></a>  
-</div>
+
  
 English | [简体中文](README-CN.md)
 
