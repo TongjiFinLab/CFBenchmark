@@ -31,8 +31,8 @@ In the future, we will continue to contribute more benchmark evaluations in this
 # Contents
 
 - [CFBenchmark-Basic](#cfbenchmark-basic)
-    - [QuickStart](##QuickStart)
-    - [Performance of Existing LLMs](##performance-of-existing-llms)
+    - [QuickStart](#QuickStart)
+    - [Performance of Existing LLMs](#performance-of-existing-llms)
 - [Acknowledgements](#acknowledgements)
 - [To-Do](#to-do)
 - [License](#license)
