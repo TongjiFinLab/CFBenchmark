@@ -1,6 +1,6 @@
 <div style="text-align:center">
 <!-- <img src="https://big-cheng.com/k2/k2.png" alt="k2-logo" width="200"/> -->
-<h2>📈 CFBenchmark: Chinese Financial Assistant with Large Language Model</h2>
+<h2>📈 CFBenchmark: Chinese Financial Assistant Benchmark for Large Language Model</h2>
 </div>
 
 <div align="left">
