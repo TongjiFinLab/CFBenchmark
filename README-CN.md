@@ -220,8 +220,13 @@ CFBenchmark是一项研究预览，仅供非商业使用，受OpenAI生成数据
 # 引用
 
 ```bibtex
-@misc{
-
+@misc{lei2023cfbenchmark,
+      title={CFBenchmark: Chinese Financial Assistant Benchmark for Large Language Model}, 
+      author={Yang Lei, Jiangtong Li, Ming Jiang, Junjie Hu, Dawei Cheng, Zhijun Ding, Changjun Jiang},
+      year={2023},
+      eprint={2311.05812},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
 }
 ```
 
