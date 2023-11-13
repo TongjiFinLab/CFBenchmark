@@ -237,7 +237,12 @@ CFBenchmark is a research preview intended for non-commercial use only, subject 
 # Citation
 
 ```bibtex
-@misc{
-
+@misc{lei2023cfbenchmark,
+      title={CFBenchmark: Chinese Financial Assistant Benchmark for Large Language Model}, 
+      author={Yang Lei, Jiangtong Li, Ming Jiang, Junjie Hu, Dawei Cheng, Zhijun Ding, Changjun Jiang},
+      year={2023},
+      eprint={2311.05812},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
 }
 ```
