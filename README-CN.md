@@ -5,7 +5,7 @@
 
 <div align="center">
 
-<a href=''><img src='https://img.shields.io/badge/Paper-ArXiv-C71585'></a> 
+<a href='https://arxiv.org/abs/2311.05812'><img src='https://img.shields.io/badge/Paper-ArXiv-C71585'></a> 
 <a href=''><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging Face-CFBenchmark-red'></a> 
 ![license](https://img.shields.io/badge/License-Apache--2.0-blue.svg)
 
