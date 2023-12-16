@@ -112,7 +112,7 @@ class CFBenchmark:
         else:
             instruction=self.fewshot_text[classes]
             case='\ncase4：\n新闻内容：'+context
-            if classes=='industry' or  classes=='event' or  classes=='sentiment':
+            if classes=='sector' or  classes=='event' or  classes=='sentiment':
                 labels=row['instruction'].split('（',1)[1]
                 labels=labels.split('）',1)[0]
                 case=case+'\n类别：（'+labels+'）\n'
