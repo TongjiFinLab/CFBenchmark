@@ -184,7 +184,7 @@ The best scores of LLMs(considering zero-shot and few-shot), as well as which of
 
 
 
-| Model              | Size | Company   | Product   | R.Avg     | Industry  | Event     | Sentiment | C.Avg     | Summary   | Risk      | Suggestion | G.Avg     | Avg       |
+| Model              | Size | Company   | Product   | R.Avg     | Sector  | Event     | Sentiment | C.Avg     | Summary   | Risk      | Suggestion | G.Avg     | Avg       |
 | ------------------ | ---- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | ---------- | --------- | --------- |
 | HUMAN              | -    | 0.931     | 0.744     | 0.838     | 0.975     | 0.939     | 0.912     | 0.942     | 1.000     | 1.000     | 1.000      | 1.000     | 0.927     |
 | ChatGPT            | 20B  | 0.797     | 0.198     | 0.498     | 0.453     | 0.458     | 0.425     | 0.455     | 0.593     | 0.541     | 0.771      | 0.635     | 0.529     |
@@ -238,8 +238,8 @@ CFBenchmark is a research preview intended for non-commercial use only, subject 
 
 ```bibtex
 @misc{lei2023cfbenchmark,
-      title={CFBenchmark: Chinese Financial Assistant Benchmark for Large Language Model}, 
-      author={Yang Lei, Jiangtong Li, Ming Jiang, Junjie Hu, Dawei Cheng, Zhijun Ding, Changjun Jiang},
+      title={{CFBenchmark}: Chinese Financial Assistant Benchmark for Large Language Model}, 
+      author={Lei, Yang and Li, Jiangtong and Jiang, Ming and Hu, Junjie and Cheng, Dawei and Ding, Zhijun and Jiang, Changjun},
       year={2023},
       eprint={2311.05812},
       archivePrefix={arXiv},

@@ -172,7 +172,7 @@ class CFBenchmark:
 对于识别和分类任务，我们采用 **F1_score** 作为评估指标，平衡了精度和召回率。 对于生成任务，我们利用地面实况的向量表示和生成的答案之间的**余弦相似度**来衡量生成能力。 由于在我们的生成任务中通常存在具有相似含义的不同表达，因此简单地使用 Rough-Score 或 BULE-socre 是不合理的。 具体来说，指定**bge-zh-v1.5**作为oracle模型来生成句子嵌入。 我们单独计算每个子任务的评估分数，并提供每个类别的平均分数。
 
 大语言模型的最佳分数（考虑零样本和少样本）以及我们的模型的最佳分数如下所示：
-| Model              | Size | Company | Product | R.Avg   | Industry | Event   | Sentiment | C.Avg   | Summary | Risk    | Suggestion | G.Avg   | Avg     |
+| Model              | Size | Company | Product | R.Avg   | Sector | Event   | Sentiment | C.Avg   | Summary | Risk    | Suggestion | G.Avg   | Avg     |
 | ------------------ | ---- | ------- | ------- | -----   | -------- | -----   | --------- | -----   | ------- | -----   | ---------- | -----   | -----   |
 | ChatGPT            | 20B  | 0.797   | 0.198   | 0.498   | 0.453    | 0.458   | 0.425     | 0.455   | 0.593   | 0.541   | 0.771      | 0.635   | 0.529   |
 | ERNIE-Bot          | 260B | 0.807   | 0.300   | 0.533   | 0.408    | 0.350   | 0.186     | 0.315   | 0.715   | 0.590   | 0.716      | 0.673   | 0.507   |
@@ -221,8 +221,8 @@ CFBenchmark是一项研究预览，仅供非商业使用，受OpenAI生成数据
 
 ```bibtex
 @misc{lei2023cfbenchmark,
-      title={CFBenchmark: Chinese Financial Assistant Benchmark for Large Language Model}, 
-      author={Yang Lei, Jiangtong Li, Ming Jiang, Junjie Hu, Dawei Cheng, Zhijun Ding, Changjun Jiang},
+      title={{CFBenchmark}: Chinese Financial Assistant Benchmark for Large Language Model}, 
+      author={Lei, Yang and Li, Jiangtong and Jiang, Ming and Hu, Junjie and Cheng, Dawei and Ding, Zhijun and Jiang, Changjun},
       year={2023},
       eprint={2311.05812},
       archivePrefix={arXiv},

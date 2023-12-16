@@ -25,7 +25,7 @@ class CFBenchmark:
         self.model_path=model_path
 
         self.classifications=['company','product',
-                            'industry','event','sentiment',
+                            'sector','event','sentiment',
                             'summary','risk','suggestion']
 
         
@@ -76,7 +76,7 @@ class CFBenchmark:
                     device_map="cuda:0",
                     torch_dtype=torch.bfloat16
                 )
-                model = model.eval()
+                self.model = self.model.eval()
             else:
                 self.tokenizer = AutoTokenizer.from_pretrained(model_dir, trust_remote_code=True)
                 self.model = AutoModelForCausalLM.from_pretrained(
@@ -86,7 +86,7 @@ class CFBenchmark:
                     device_map="cpu",
                     torch_dtype=torch.float16
                 ).to('cuda:0')
-                model = model.eval()
+                self.model = self.model.eval()
             
         else:
             base_model = self.model_path
@@ -99,7 +99,7 @@ class CFBenchmark:
             torch_dtype=torch.bfloat16
             )
             self.model = PeftModel.from_pretrained(base_model,peft_model_path)
-            model = model.eval()
+            self.model = self.model.eval()
             self.tokenizer = AutoTokenizer.from_pretrained(base_model, trust_remote_code=True)
         print('getting {} response'.format(os.path.join(self.model_path,self.modelname)))   
         self.get_model_results()
