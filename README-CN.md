@@ -34,7 +34,9 @@
 
 # 更新
 
-\[2024.03.17\] 我们针对[OpenFinData](https://github.com/open-compass/OpenFinData)生成式问题难以客观评测的问题，利用文心一言作为打分器，提供了针对性的实现。可以对金融分析，金融解释和金融合规性三类问题进行评测，并据发布了9个模型在[OpenFinData](https://github.com/open-compass/OpenFinData)的评测结果。关于[OpenFinData](https://github.com/open-compass/OpenFinData)评测的官方实现，可参考[OpenCompass](https://github.com/open-compass/opencompass/blob/main/configs/datasets/OpenFinData/OpenFinData.md)的结果。
+\[2024.03.17\] 增加了在金融数据集[OpenFinData](https://github.com/open-compass/OpenFinData)上的评测内容，提供了该数据集中对应主观题的一种评测代码实现方式，并测试了9个大模型在[OpenFinData](https://github.com/open-compass/OpenFinData) 数据集上的评测结果。
+
+>  [OpenFinData](https://github.com/open-compass/OpenFinData)数据来源于东方财富与上海人工智能实验室联合发布的开源项目，更多详情：[Github地址](https://github.com/open-compass/opencompass/blob/main/configs/datasets/OpenFinData/OpenFinData.md)。
 
 \[2023.11.10\] 我们发布了[CFBenchmark-Basic](https://huggingface.co/datasets/TongjiFinLab/CFBenchmark)和对应的[技术报告](https://arxiv.org/abs/2311.05812)，主要针对大模型在金融自然语言任务和金融文本生成任务上的能力进行全面评测。
 
