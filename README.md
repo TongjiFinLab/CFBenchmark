@@ -8,7 +8,7 @@
 <a href='https://huggingface.co/datasets/TongjiFinLab/CFBenchmark'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging Face-CFBenchmark-red'></a>  
 <a href=''><img src='https://img.shields.io/badge/License-Apache--2.0-blue.svg'></a>  
 </div>
- 
+
 English | [简体中文](README-CN.md)
 
 
@@ -34,7 +34,9 @@ In the future, the "InternLM·JiShi" Chinese Financial Evaluation Benchmark will
 
 # News
 
-[2024.03.17] To address the difficulty of objectively evaluating generative questions in [OpenFinData](https://github.com/open-compass/OpenFinData), we utilized ERNIE-4 as a scorer to provide targeted implementations. This allows for the evaluation of three types of problems: financial analysis, financial explanation, and financial compliance. The evaluation results of 9 LLMs on [OpenFinData](https://github.com/open-compass/OpenFinData) have been published. For the official implementation of the [OpenFinData](https://github.com/open-compass/OpenFinData) evaluation, you can refer to the results on [OpenCompass](https://github.com/open-compass/opencompass/blob/main/configs/datasets/OpenFinData/OpenFinData.md).
+[2024.03.17] Added the evaluation on the financial dataset [OpenFinData](https://github.com/open-compass/OpenFinData) and released an implementation of the evaluation of the subjective questions in this dataset. In addition, we also reported the test results of 9 LLMs on the OpenFinData dataset.
+
+> [OpenFinData](https://github.com/open-compass/OpenFinData) is publicly released by EastMoney.com and Shanghai AI Lab. See details  [Github](https://github.com/open-compass/opencompass/blob/main/configs/datasets/OpenFinData/OpenFinData.md).
 
 [2023.11.10] We released [CFBenchmark-Basic](https://huggingface.co/datasets/TongjiFinLab/CFBenchmark) and the corresponding [technical report](https://arxiv.org/abs/2311.05812), mainly focusing on a comprehensive evaluation of large models in financial natural language tasks and financial text generation tasks.
 
