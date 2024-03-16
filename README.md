@@ -18,15 +18,25 @@ Welcome to **CFBenchmark**
 
 In recent years, with the rapid development of Large Language Models~(LLMs), outstanding performance has been achieved in various tasks by existing LLMs. However, we notice that there is currently a limited amount of benchmarks focused on assessing the performance of LLMs in specific domains. 
 
-In this work, we introduce CFBenchmark, a Chinese financial assistant benchmark for large language models. The basic version of CFBenchmark includes 3917 financial texts spanning three aspects and eight tasks. The CFBenchmark is organized into three aspects, financial recognition, financial classification, and financial generation. We conduct experiments in zero-shot and few-shot mode on our CFBenchmark to evaluate renowned LLMs available in the market. The results have revealed that there is still significant room to improve LLMs in basic tasks of financial text processing.
+The "InternLM·JiShi" Chinese Financial Evaluation Benchmark (CFBenchmark) basic version consists of data from [CFBenchmark-Basic](https://huggingface.co/datasets/TongjiFinLab/CFBenchmark) and [OpenFinData](https://github.com/open-compass/OpenFinData), focusing on evaluating the capabilities and safety of related large models in practical financial applications in the following aspects:
+* Financial Natural Language Processing, mainly focusing on the model's understanding and generation capabilities of financial texts, such as financial entity recognition, industry classification, research report summarization, and risk assessment;
+* Financial Scenario Calculation, focusing on assessing the model's calculation and reasoning capabilities in specific financial scenarios, such as risk assessment and investment portfolio optimization;
+* Financial Analysis and Interpretation Tasks, testing the model's ability to understand complex financial reports, predict market trends, and assist in decision-making;
+* Financial Compliance and Security Checks, assessing the model's potential compliance risks, such as the privacy, content safety, and financial compliance capabilities of generated content.
 
-In the future, we will continue to contribute more benchmark evaluations in this series.
+In the future, the "InternLM·JiShi" Chinese Financial Evaluation Benchmark will continue to deepen the construction of the financial big model evaluation system, including assessing the accuracy, timeliness, safety, privacy, and compliance of the model-generated content in the financial industry application process.
+
 
 <div align="center">
   <img src="imgs/Framework.png" width="100%"/>
   <br />
   <br /></div>
 
+# News
+
+[2024.03.18] We have integrated [OpenFinData](https://github.com/open-compass/OpenFinData) into the "InternLM·JiShi" Chinese Financial Evaluation Benchmark, which can better evaluate the capabilities and safety of related large models in practical financial applications.
+
+[2023.11.10] We released [CFBenchmark-Basic](https://huggingface.co/datasets/TongjiFinLab/CFBenchmark) and the corresponding [technical report](https://arxiv.org/abs/2311.05812), mainly focusing on a comprehensive evaluation of large models in financial natural language tasks and financial text generation tasks.
 
 # Contents
 
@@ -65,9 +75,9 @@ Example 2 Zeroshot Input：
   <br />
   <br /></div>
 
-## QuickStart
+# QuickStart
 
-### Installation
+## Installation
 
 Below are the steps for quick installation.
 
@@ -84,7 +94,7 @@ Below are the steps for quick installation.
 
 
 
-### Dataset Preparation
+## Dataset Preparation
 
 Download the dataset utilizing the Hugging Face dataset. Run the command **Manual download** and unzip it. Run the following command in the CFBenchmark project directory to prepare the data set in the CFBenchmark/CFBenchmark directory.
 
@@ -94,7 +104,9 @@ unzip CFBenchmark.zip
 ```
 
 
-### Evaluation
+## Evaluation
+
+### CFBenchmark-Basic
 
 We have prepared the testing and evaluation codes for you in repo ```/codes```.  
 
@@ -165,10 +177,39 @@ class CFBenchmark:
 * You can modify the hyperparameters in CFBenchmark.generate_model() for text generations. 
 * We provide CFBenchmark saved as a Dataset data type in both Hugging Face and Github. If you want to use an offline version of the benchmark, set the parameter data_source_type to offline````. If you want to use the online version of the benchmark, set the parameterdata_source_typetoonline```.
 
+### OpenFinData
+
+In the `./OpenFinData` directory, we have prepared the code and data for testing and evaluation. The design of the evaluation code is similar to Fineva1.0, where the mode of calling the evaluation model is defined through `./OpenFinData/src/evaluator`, and the key parameters are configured and experimented with through the bash files in `OpenFinData/run_scripts`.
+
+To run the evaluation, you can execute the following code in the command line:
+
+```cmd
+cd CFBenchmark/OpenFinData/run_scripts
+sh run_baichuan2_7b.sh
+```
+
+It's important to note that since the evaluation process of OpenFinData involves subjective judgement, our evaluation framework utilizes Wenxin Yiyan to evaluate financial interpretation and analysis problems as well as financial compliance issues. To smoothly use the Wenxin Yiyan API for evaluation, please set `BAIDU_API_KEY` and `BAIDU_SECRET_KEY` in your environment variables, so that the `get_access_token` function in `./OpenFinData/src/get_score.py` can run successfully.
+
+```Py
+def get_access_token():
+    """
+    使用 API Key，Secret Key 获取access_token，替换下列示例中的应用API Key、应用Secret Key
+    """
+
+    url = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={}&client_secret={}".format(os.environ.get("BAIDU_API_KEY"), os.environ.get("BAIDU_SECRET_KEY"))
+    
+    payload = json.dumps("")
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+    
+    response = requests.request("POST", url, headers=headers, data=payload)
+    return response.json().get("access_token")
+```
 
 
-
-## Performance of Existing LLMs
+# Performance of Existing LLMs
 
 We utilize two types of metrics to evaluate the performance of LLMs in the financial domain on our CFBenchmark. 
 
@@ -183,7 +224,7 @@ Specifically, the **bge-zh-v1.5** is assigned as the oracle model to generate th
 The best scores of LLMs(considering zero-shot and few-shot), as well as which of our model,  are demonstrated below:
 
 
-
+## CFBenchmark-Basic
 | Model              | Size | Company   | Product   | R.Avg     | Sector  | Event     | Sentiment | C.Avg     | Summary   | Risk      | Suggestion | G.Avg     | Avg       |
 | ------------------ | ---- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | ---------- | --------- | --------- |
 | HUMAN              | -    | 0.931     | 0.744     | 0.838     | 0.975     | 0.939     | 0.912     | 0.942     | 1.000     | 1.000     | 1.000      | 1.000     | 0.927     |
@@ -209,8 +250,21 @@ The best scores of LLMs(considering zero-shot and few-shot), as well as which of
 | InternLM-20B-Chat  | 20B  | 0.488     | 0.362     | 0.425     | 0.323     | 0.327     | 0.370     | 0.340     | 0.706     | 0.578     | 0.762      | 0.662     | 0.476     |
 | CFGPT1-stf-LoRA    | 7B   | 0.820     | 0.414     | 0.617     | 0.569     | 0.729     | 0.769     | 0.689     | 0.745     | 0.584     | 0.609      | 0.646     | 0.650     |
 | CFGPT1-sft-Full    | 7B   | **0.836** | **0.476** | **0.656** | **0.700** | **0.808** | **0.829** | **0.779** | **0.798** | **0.669** | **0.808**  | **0.758** | **0.731** |
+| CFGPT2             | 13B  |**0.861**|**0.490**|**0.676**|**0.722** |**0.835**|**0.831**  |**0.796**|**0.821**|**0.723**|**0.831**   |**0.792**|**0.755**|
 
+## OpenFinData
 
+| Model              | Size | Knowledge | Caluation | Explanation | Identification | Analysis | Compliance | Average | 
+| ------------------ | ---- | -------   | ------    | -----       | ---------      | -----    | -------    | -----   |
+| ERNIE-Bot-3.5      | -    | 78.0      | 70.4      | 82.1        | 75.3           | 77.7     | 36.7       | 70.0    | 
+| ERNIE-Bot-4        | -    | **87.3**  | **73.6**  | **84.3**    | **77.0**       | **79.1** | 37.3       |**73.1** | 
+| InternLM-7B        | 7B   | 65.3      | 45.8      | 71.4        | 62.5           | 59.2     | 37.2       | 56.9    | 
+| ChatGLM2-6B        | 6B   | 62.4      | 37.2      | 70.8        | 59.2           | 58.3     | 38.7       | 54.4    | 
+| Qwen-Chat-7B       | 7B   | 71.3      | 40.5      | 71.4        | 58.6           | 51.3     | 40.0       | 55.5    | 
+| Qwen-Chat-14B      | 14B  | 78.0      | 57.6      | 75.6        | 71.6           | 59.3     | 40.6       | 63.8    | 
+| Baichuan2-7B-Chat  | 7B   | 46.2      | 37.0      | 76.5        | 60.2           | 55.0     | 28.7       | 50.6    | 
+| Baichuan2-13B-Chat | 13B  | 69.3      | 39.5      | 75.3        | 65.7           | 62.0     | 31.3       | 57.2    | 
+| CFGPT-2            | 13B  | 86.7      | 64.3      | 77.3        | 73.8           | 65.2     |**70.2**    | 72.9    | 
 
 # Acknowledgements
 
@@ -225,6 +279,9 @@ CFBenchmark has referred to the following open-source projects. We want to expre
 - ssymmetry/BBT-FinCUGE-Applications(https://github.com/ssymmetry/BBT-FinCUGE-Applications)
 - chancefocus/PIXIU(https://github.com/chancefocus/PIXIU)
 - SUFE-AIFLM-Lab/FinEval(https://github.com/SUFE-AIFLM-Lab/FinEval)
+- alipay/financial_evaluation_dataset(https://github.com/alipay/financial_evaluation_dataset)
+- open-compass/OpenFinData(https://github.com/open-compass/OpenFinData)
+- QwenLM/Qwen(https://github.com/QwenLM/Qwen)
 
 
 # To-Do

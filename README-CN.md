@@ -6,7 +6,7 @@
 <div align="center">
 
 <a href='https://arxiv.org/abs/2311.05812'><img src='https://img.shields.io/badge/Paper-ArXiv-C71585'></a> 
-<a href=''><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging Face-CFBenchmark-red'></a> 
+<a href='https://huggingface.co/datasets/TongjiFinLab/CFBenchmark'><img src='https://img.shields.io/badge/%F0%9F%A4%97%20Hugging Face-CFBenchmark-red'></a> 
 ![license](https://img.shields.io/badge/License-Apache--2.0-blue.svg)
 
 [English](README.md) | 简体中文
@@ -19,17 +19,24 @@
 
 近年来，随着大语言模型（LLM）的快速发展，现有的大语言模型在各项任务中都取得了优异的表现。 然而，我们注意到，目前专注于大语言模型在特定领域表现的基准测试数量有限。
 
-由此，我们推出了CFBenchmark，这是一个旨在评估大语言模型在中文金融场景下辅助工作的基准评测。
-CFBenchmark的基础版本包括3917个金融文本涵盖三个方面和八个任务。 
-CFBenchmark从金融识别、金融分类、金融生成三个方面进行组织。 我们在 CFBenchmark 上以零样本和少样本模式进行实验，以评估市场上著名的大语言模型。 结果表明，大语言模型在金融文本处理的基本任务方面仍有很大的改进空间。
+“书生•济世”中文金融评测基准（CFBenchmark）基础版本由[CFBenchmark-Basic](https://huggingface.co/datasets/TongjiFinLab/CFBenchmark)和[OpenFinData](https://github.com/open-compass/OpenFinData)两部分数据组成，主要包含以下几方面，来评测相关大模型在金融实际应用中的各项能力和安全性：
+* 金融自然语言处理，主要关注模型对金融文本的理解和生成能力，如金融实体识别，行业分类，研报总结和风险评估；
+* 金融场景计算，侧重于评估模型在特定金融场景下的计算和推理能力，如风险评估和投资组合优化；
+* 金融分析与解读任务，检验模型在理解复杂金融报告、预测市场趋势和辅助决策制定方面的能力；
+* 金融合规与安全检查，评估模型潜在的合规风险，如生成内容的隐私性、内容安全性、金融合规性等方面的能力。
 
-未来，我们还会继续更新这一系列，推出更多的基于中文语料库，金融领域的大语言模型基准测试。
+未来，“书生•济世”中文金融评测基准将继续深化金融大模型评测体系建设，包括大模型在金融行业应用过程中的模型生成内容的准确性、及时性、安全性、隐私性、合规性等能力评估。
 
 <div align="center">
   <img src="imgs/Framework.png" width="100%"/>
   <br />
   <br /></div>
 
+# 更新
+
+\[2024.03.18\] 我们将[OpenFinData](https://github.com/open-compass/OpenFinData)融入了“书生•济世”中文金融评测基准，可以更好的评测相关大模型在金融实际应用中的各项能力和安全性。
+
+\[2023.11.10\] 我们发布了[CFBenchmark-Basic](https://huggingface.co/datasets/TongjiFinLab/CFBenchmark)和对应的[技术报告](https://arxiv.org/abs/2311.05812)，主要针对大模型在金融自然语言任务和金融文本生成任务上的能力进行全面评测。
 
 # 目录
 
@@ -93,6 +100,9 @@ unzip CFBenchmark.zip
 ```
 
 ## 测评
+
+### CFBenchmark-Basic
+
 我们在 ```/codes``` 中为您准备了测试和评估代码。
 
 为了运行测评，您可以在命令行中运行以下代码：
@@ -116,7 +126,7 @@ if __name__=='__main__':
     fewshot_text_path= '../fewshot'#DEFAULT PATH
     test_type='few-shot'#LET'S TAKE THE FEW-SHOT TEST AS AN EXAMPLE
     response_path='../cfbenchmark-response'#PATH TO RESERVE THE RESPONSE OF YOUR MODEL
-    scores_path='../cfbenchmark-scores'	#PATH TO RESERVE THE SCORE OF YOUR MODEL
+    scores_path='../cfbenchmark-scores' #PATH TO RESERVE THE SCORE OF YOUR MODEL
     embedding_model_path='../bge-zh-v1.5' #PASS YOUR OWN PATH OF BGE-ZH-V1.5
     benchmark_path='../cfbenchmark' #DEFAULT PATH
     data_source_type='offline'#online or offline
@@ -139,8 +149,6 @@ if __name__=='__main__':
     cfb.generate_model()# TO GET RESPONSE FROM YOUR MODEL
     cfb.get_test_scores()# TO GET YOUR MODEL SCORES FROM RESPONSE
 ```
-
-
 
 我们在```codes/CFBenchmark.py```中定义了一个类“CFBenchmark”来进行评估。
 
@@ -166,11 +174,45 @@ class CFBenchmark:
 * 您可以修改“CFBenchmark.generate_model()”中的超参数来生成文本。
 * 我们在Hugging Face和Github中都提供了保存为Dataset数据类型的CFBenchmark。如果您想使用离线版本的基准，将参数```data_source_type```设置为```offline```。如果您想使用在线版本的基准，将参数```data_source_type```设置为```online```。
 
+### OpenFinData
+
+我们在```./OpenFinData``` 中为您准备了测试和评估的代码与数据。
+评测代码的设计与Fineva1.0相似，通过```./OpenFinData/src/evaluator```对于评测模型的调用方式进行定义，并通过```OpenFinData/run_scripts```中的bash文件对于关键参数进行配置和实验。
+
+为了运行测评，您可以在命令行中运行以下代码：
+
+```cmd
+cd CFBenchmark/OpenFinData/run_scripts
+sh run_baichuan2_7b.sh
+```
+
+值得注意的是，因为OpenFinData的评测过程涉及主观题的判断，因此我们的评测框架借助了文心一言来对金融解读与分析类问题和金融合规类问题进行评测。为了顺利试用文心一言的API参与评测，请您在环境变量中设置```BAIDU_API_KEY```和```BAIDU_SECRET_KEY```，以便于```./OpenFinData/src/get_score.py```的```get_access_token```函数可以顺利运行。
+
+```Py
+def get_access_token():
+    """
+    使用 API Key，Secret Key 获取access_token，替换下列示例中的应用API Key、应用Secret Key
+    """
+
+    url = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={}&client_secret={}".format(os.environ.get("BAIDU_API_KEY"), os.environ.get("BAIDU_SECRET_KEY"))
+    
+    payload = json.dumps("")
+    headers = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
+    
+    response = requests.request("POST", url, headers=headers, data=payload)
+    return response.json().get("access_token")
+```
+
+
 # 测试结果
 
 我们使用两种类型的指标来评估金融领域大语言模型在 CFBenchmark 上的表现。
 对于识别和分类任务，我们采用 **F1_score** 作为评估指标，平衡了精度和召回率。 对于生成任务，我们利用地面实况的向量表示和生成的答案之间的**余弦相似度**来衡量生成能力。 由于在我们的生成任务中通常存在具有相似含义的不同表达，因此简单地使用 Rough-Score 或 BULE-socre 是不合理的。 具体来说，指定**bge-zh-v1.5**作为oracle模型来生成句子嵌入。 我们单独计算每个子任务的评估分数，并提供每个类别的平均分数。
 
+## CFBenchmark-Basic
 大语言模型的最佳分数（考虑零样本和少样本）以及我们的模型的最佳分数如下所示：
 | Model              | Size | Company | Product | R.Avg   | Sector | Event   | Sentiment | C.Avg   | Summary | Risk    | Suggestion | G.Avg   | Avg     |
 | ------------------ | ---- | ------- | ------- | -----   | -------- | -----   | --------- | -----   | ------- | -----   | ---------- | -----   | -----   |
@@ -195,7 +237,22 @@ class CFBenchmark:
 | InternLM-20B       | 20B  | 0.809   | 0.358   | 0.583   | 0.500    | 0.427   | 0.417     | 0.448   | 0.706   | 0.653   | 0.728      | 0.695   | 0.575   |
 | InternLM-20B-Chat  | 20B  | 0.488   | 0.362   | 0.425   | 0.323    | 0.327   | 0.370     | 0.340   | 0.706   | 0.578   | 0.762      | 0.662   | 0.476   |
 | CFGPT1-stf-LoRA    | 7B   | 0.820   | 0.414   | 0.617   | 0.569    | 0.729   | 0.769     | 0.689   | 0.745   | 0.584   | 0.609      | 0.646   | 0.650   |
-| CFGPT1-sft-Full    | 7B   |**0.836**|**0.476**|**0.656**|**0.700** |**0.808**|**0.829**  |**0.779**|**0.798**|**0.669**|**0.808**   |**0.758**|**0.731**|
+| CFGPT1-sft-Full    | 7B   |  0.836  |  0.476  |  0.656  |  0.700   |  0.808  |  0.829    |  0.779  |  0.798  |  0.669  |  0.808     |  0.758  |  0.731  |
+| CFGPT2             | 13B  |**0.861**|**0.490**|**0.676**|**0.722** |**0.835**|**0.831**  |**0.796**|**0.821**|**0.723**|**0.831**   |**0.792**|**0.755**|
+
+## OpenFinData
+
+| Model              | Size | Knowledge | Caluation | Explanation | Identification | Analysis | Compliance | Average | 
+| ------------------ | ---- | -------   | ------    | -----       | ---------      | -----    | -------    | -----   |
+| ERNIE-Bot-3.5      | -    | 78.0      | 70.4      | 82.1        | 75.3           | 77.7     | 36.7       | 70.0    | 
+| ERNIE-Bot-4        | -    | **87.3**  | **73.6**  | **84.3**    | **77.0**       | **79.1** | 37.3       |**73.1** | 
+| InternLM-7B        | 7B   | 65.3      | 45.8      | 71.4        | 62.5           | 59.2     | 37.2       | 56.9    | 
+| ChatGLM2-6B        | 6B   | 62.4      | 37.2      | 70.8        | 59.2           | 58.3     | 38.7       | 54.4    | 
+| Qwen-Chat-7B       | 7B   | 71.3      | 40.5      | 71.4        | 58.6           | 51.3     | 40.0       | 55.5    | 
+| Qwen-Chat-14B      | 14B  | 78.0      | 57.6      | 75.6        | 71.6           | 59.3     | 40.6       | 63.8    | 
+| Baichuan2-7B-Chat  | 7B   | 46.2      | 37.0      | 76.5        | 60.2           | 55.0     | 28.7       | 50.6    | 
+| Baichuan2-13B-Chat | 13B  | 69.3      | 39.5      | 75.3        | 65.7           | 62.0     | 31.3       | 57.2    | 
+| CFGPT-2            | 13B  | 86.7      | 64.3      | 77.3        | 73.8           | 65.2     |**70.2**    | 72.9    | 
 
 
 # 致谢
@@ -209,7 +266,9 @@ CFBenchmark 参考了以下开源项目。 我们想向这些项目的研究人�
 - ssymmetry/BBT-FinCUGE-Applications(https://github.com/ssymmetry/BBT-FinCUGE-Applications)
 - chancefocus/PIXIU(https://github.com/chancefocus/PIXIU)
 - SUFE-AIFLM-Lab/FinEval(https://github.com/SUFE-AIFLM-Lab/FinEval)
-CFBenchmark受到[XXX](https://xxx)的支持。
+- alipay/financial_evaluation_dataset(https://github.com/alipay/financial_evaluation_dataset)
+- open-compass/OpenFinData(https://github.com/open-compass/OpenFinData)
+- QwenLM/Qwen(https://github.com/QwenLM/Qwen)
 
 # 未来的工作
 - [ ] 针对中文金融使用中各种场景，提出更多的评测任务，丰富CFBenchmark系列基准。
