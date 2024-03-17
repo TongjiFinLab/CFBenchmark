@@ -279,7 +279,7 @@ CFBenchmark 参考了以下开源项目。 我们想向这些项目的研究人�
 CFBenchmark是一项研究预览，仅供非商业使用，受OpenAI生成数据的使用条款约束。如果您发现任何潜在的违规行为，请与我们联系。该代码发布在Apache License 2.0下。
 
 ### 感谢我们的贡献者 ：
-<a href="https://github.com/TongjiFinLab/CFGPT/graphs/contributors">
+<a href="https://github.com/TongjiFinLab/CFBenchmark/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=TongjiFinLab/CFBenchmark" />
 </a>
 
