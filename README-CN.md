@@ -264,7 +264,7 @@ def get_access_token():
 
 
 # 致谢
-CFBenchmark 参考了以下开源项目。 我们想向这些项目的研究人员表示感谢和尊重。
+CFBenchmark 研发过程中参考了以下开源项目。 我们向项目的研究人员表示感谢。
 - tiiuae/falcon LLM series(https://huggingface.co/tiiuae/falcon-7b)
 - bigscience/bloomz LLM series(https://huggingface.co/bigscience/bloomz-7b1)
 - QwenLM/Qwen LLM series(https://github.com/QwenLM/Qwen)
@@ -282,7 +282,7 @@ CFBenchmark 参考了以下开源项目。 我们想向这些项目的研究人�
 - [ ] 针对中文金融使用中各种场景，提出更多的评测任务，丰富CFBenchmark系列基准。
 
 # 许可证
-CFBenchmark是一项研究预览，仅供非商业使用，受OpenAI生成数据的使用条款约束。如果您发现任何潜在的违规行为，请与我们联系。该代码发布在Apache License 2.0下。
+CFBenchmark是一项研究预览，受OpenAI生成数据的使用条款约束。如果您发现任何潜在的风险行为，请与我们联系。该代码发布在Apache License 2.0下。
 
 ### 感谢我们的贡献者 ：
 <a href="https://github.com/TongjiFinLab/CFBenchmark/graphs/contributors">
@@ -294,7 +294,7 @@ CFBenchmark是一项研究预览，仅供非商业使用，受OpenAI生成数据
 ```bibtex
 @misc{lei2023cfbenchmark,
       title={{CFBenchmark}: Chinese Financial Assistant Benchmark for Large Language Model}, 
-      author={Lei, Yang and Li, Jiangtong and Jiang, Ming and Hu, Junjie and Cheng, Dawei and Ding, Zhijun and Jiang, Changjun},
+      author={Lei, Yang and Li, Jiangtong and Cheng, Dawei and Ding, Zhijun and Jiang, Changjun},
       year={2023},
       eprint={2311.05812},
       archivePrefix={arXiv},
