@@ -11,8 +11,7 @@ if __name__=='__main__':
     response_path='../cfbenchmark-response'#PATH TO RESERVE THE RESPONSE OF YOUR MODEL
     scores_path='../cfbenchmark-scores'	#PATH TO RESERVE THE SCORE OF YOUR MODEL
     embedding_model_path='../bge-zh-v1.5' #PASS YOUR OWN PATH OF BGE-ZH-V1.5
-    benchmark_path='../cfbenchmark' #DEFAULT PATH
-    data_source_type='offline'#online or offline
+    benchmark_path='../data' #DEFAULT PATH
 
     #generate Class CFBenchmark
     cfb=CFBenchmark(
@@ -25,8 +24,7 @@ if __name__=='__main__':
         response_path=response_path,
         scores_path=scores_path,
         embedding_model_path=embedding_model_path,
-        benchmark_path=benchmark_path,
-        data_source_type=data_source_type
+        benchmark_path=benchmark_path
     )
     
     cfb.generate_model()# TO GET RESPONSE FROM YOUR MODEL

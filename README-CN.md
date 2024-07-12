@@ -92,29 +92,20 @@ CFBenchmark的基础版本包括3917个金融文本涵盖三个方面和八个�
     pip install -r requirements.txt
 ```
 
-## 数据集准备
-
-使用 Hugging Face 数据集下载数据集。 运行命令**手动下载**并解压，在CFBenchmark项目目录下运行以下命令,准备数据集到CFBenchmark/CFBenchmark目录下。
-
-```text
-wget https://huggingface.co/datasets/tongjiFinLab/CFBenchmark
-unzip CFBenchmark.zip
-```
-
 ## 测评
 
 ### CFBenchmark-Basic
 
-我们在 ```/codes``` 中为您准备了测试和评估代码。
+我们在 ```CFBenchmark-basic/src``` 中为您准备了测试和评估代码。
 
 为了运行测评，您可以在命令行中运行以下代码：
 
 ```cmd
-cd CFBenchmark/codes
+cd CFBenchmark-basic/src
 python -m run.py
 ```
 
-您可以进入```codes/run.py```来修改其中的参数，让代码运行的路径符合您的要求。
+您可以进入```CFBenchmark-basic/src/run.py```来修改其中的参数，让代码运行的路径符合您的要求。
 
 ```py
 from CFBenchmark import CFBenchmark
@@ -128,10 +119,9 @@ if __name__=='__main__':
     fewshot_text_path= '../fewshot'#DEFAULT PATH
     test_type='few-shot'#LET'S TAKE THE FEW-SHOT TEST AS AN EXAMPLE
     response_path='../cfbenchmark-response'#PATH TO RESERVE THE RESPONSE OF YOUR MODEL
-    scores_path='../cfbenchmark-scores' #PATH TO RESERVE THE SCORE OF YOUR MODEL
+    scores_path='../cfbenchmark-scores'	#PATH TO RESERVE THE SCORE OF YOUR MODEL
     embedding_model_path='../bge-zh-v1.5' #PASS YOUR OWN PATH OF BGE-ZH-V1.5
-    benchmark_path='../cfbenchmark' #DEFAULT PATH
-    data_source_type='offline'#online or offline
+    benchmark_path='../data' #DEFAULT PATH
 
     #generate Class CFBenchmark
     cfb=CFBenchmark(
@@ -145,7 +135,6 @@ if __name__=='__main__':
         scores_path=scores_path,
         embedding_model_path=embedding_model_path,
         benchmark_path=benchmark_path,
-        data_source_type=data_source_type
     )
     
     cfb.generate_model()# TO GET RESPONSE FROM YOUR MODEL
@@ -166,25 +155,25 @@ class CFBenchmark:
                  response_path,
                  scores_path,
                  embedding_model_path,
-                 benchmark_path,
-                 data_source_type
+                 benchmark_path
                  ) -> None:
 ```
+
 * 您可以使用参数来设置模型的路径。 如果你想使用进行LoRA微调后的模型，请将``model_type``设置为````LoRA````并通过````peft_model_path```传递你的peft模型路径。
 * 您可以将``test-type``设置为'zero-shot'或'few-shot'来进行不同的评估。
 * 为“bzh-zh-v1.5”设置“embedding_model_path”，用于计算余弦相似度。
 * 您可以修改“CFBenchmark.generate_model()”中的超参数来生成文本。
-* 我们在Hugging Face和Github中都提供了保存为Dataset数据类型的CFBenchmark。如果您想使用离线版本的基准，将参数```data_source_type```设置为```offline```。如果您想使用在线版本的基准，将参数```data_source_type```设置为```online```。
+* 我们在Hugging Face和Github中都提供了保存为Dataset数据类型的CFBenchmark。
 
 ### OpenFinData
 
-我们在```./OpenFinData``` 中为您准备了测试和评估的代码与数据。
-评测代码的设计与Fineva1.0相似，通过```./OpenFinData/src/evaluator```对于评测模型的调用方式进行定义，并通过```OpenFinData/run_scripts```中的bash文件对于关键参数进行配置和实验。
+我们在```CFBenchmark-OpenFinData``` 中为您准备了测试和评估的代码与数据。
+评测代码的设计与Fineva1.0相似，通过```CFBenchmark-OpenFinData/src/evaluator```对于评测模型的调用方式进行定义，并通过```CFBenchmark-OpenFinData/run_scripts```中的bash文件对于关键参数进行配置和实验。
 
 为了运行测评，您可以在命令行中运行以下代码：
 
 ```cmd
-cd CFBenchmark/OpenFinData/run_scripts
+cd CFBenchmark-OpenFinData/run_scripts
 sh run_baichuan2_7b.sh
 ```
 
@@ -219,8 +208,8 @@ def get_access_token():
 | Model              | Size | Company   | Product   | R.Avg     | Sector    | Event     | Sentiment | C.Avg     | Summary   | Risk      | Suggestion | G.Avg     | Avg       |
 | ------------------ | ---- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | ---------- | --------- | --------- |
 | HUMAN              | -    | 0.931     | 0.744     | 0.838     | 0.975     | 0.939     | 0.912     | 0.942     | 1.000     | 1.000     | 1.000      | 1.000     | 0.927     |
-| ChatGPT            | 20B  | 0.797     | 0.198     | 0.498     | 0.453     | 0.458     | 0.425     | 0.455     | 0.593     | 0.541     | 0.771      | 0.635     | 0.529     |
-| ERNIE-Bot          | 260B | 0.807     | 0.300     | 0.533     | 0.408     | 0.350     | 0.186     | 0.315     | 0.715     | 0.590     | 0.716      | 0.673     | 0.507     |
+| ChatGPT            | -    | 0.797     | 0.198     | 0.498     | 0.453     | 0.458     | 0.425     | 0.455     | 0.593     | 0.541     | 0.771      | 0.635     | 0.529     |
+| ERNIE-Bot          | -    | 0.807     | 0.300     | 0.533     | 0.408     | 0.350     | 0.186     | 0.315     | 0.715     | 0.590     | 0.716      | 0.673     | 0.507     |
 | ERNIE-Bot-4        | -    | 0.819     | 0.417     | 0.618     | 0.418     | 0.358     | 0.375     | 0.384     | 0.721     | 0.629     | 0.718      | 0.689     | 0.564     |
 | Falcon-7B          | 7B   | 0.671     | 0.168     | 0.420     | 0.169     | 0.132     | 0.250     | 0.184     | 0.302     | 0.301     | 0.246      | 0.283     | 0.296     |
 | Falcon-7B-chat     | 7B   | 0.582     | 0.046     | 0.314     | 0.112     | 0.142     | 0.153     | 0.135     | 0.307     | 0.299     | 0.258      | 0.288     | 0.246     |
@@ -264,7 +253,8 @@ def get_access_token():
 
 
 # 致谢
-CFBenchmark 研发过程中参考了以下开源项目。 我们向项目的研究人员表示感谢。
+CFBenchmark 研发过程中参考了以下开源项目。 我们向项目的研究人员表示尊重和感谢。
+
 - tiiuae/falcon LLM series(https://huggingface.co/tiiuae/falcon-7b)
 - bigscience/bloomz LLM series(https://huggingface.co/bigscience/bloomz-7b1)
 - QwenLM/Qwen LLM series(https://github.com/QwenLM/Qwen)
@@ -282,9 +272,9 @@ CFBenchmark 研发过程中参考了以下开源项目。 我们向项目的研�
 - [ ] 针对中文金融使用中各种场景，提出更多的评测任务，丰富CFBenchmark系列基准。
 
 # 许可证
-CFBenchmark是一项研究预览，受OpenAI生成数据的使用条款约束。如果您发现任何潜在的风险行为，请与我们联系。该代码发布在Apache License 2.0下。
+CFBenchmark是一项仅用于非商业使用的研究预览，受OpenAI生成数据的使用条款约束。如果您发现任何潜在的风险行为，请与我们联系。该代码发布在Apache License 2.0下。
 
-### 感谢我们的贡献者 ：
+# 感谢我们的贡献者 ：
 <a href="https://github.com/TongjiFinLab/CFBenchmark/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=TongjiFinLab/CFBenchmark" />
 </a>

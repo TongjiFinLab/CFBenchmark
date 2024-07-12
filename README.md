@@ -43,8 +43,8 @@ In the future, the "InternLM·JiShi" Chinese Financial Evaluation Benchmark will
 # Contents
 
 - [CFBenchmark-Basic](#cfbenchmark-basic)
-    - [QuickStart](#QuickStart)
-    - [Performance of Existing LLMs](#performance-of-existing-llms)
+- [QuickStart](#QuickStart)
+- [Performance of Existing LLMs](#performance-of-existing-llms)
 - [Acknowledgements](#acknowledgements)
 - [To-Do](#to-do)
 - [License](#license)
@@ -94,30 +94,18 @@ Below are the steps for quick installation.
     pip install -r requirements.txt
 ```
 
-
-
-## Dataset Preparation
-
-Download the dataset utilizing the Hugging Face dataset. Run the command **Manual download** and unzip it. Run the following command in the CFBenchmark project directory to prepare the data set in the CFBenchmark/CFBenchmark directory.
-
-```text
-wget https://huggingface.co/TongjiFinLab/CFBenchmark
-unzip CFBenchmark.zip
-```
-
-
 ## Evaluation
 
 ### CFBenchmark-Basic
 
-We have prepared the testing and evaluation codes for you in repo ```/codes```.  
+We have prepared the testing and evaluation codes for you in repo ```CFBenchmark-basic/src```.  
 
 To begin the evaluation, you can run the following code from the command line:
 ```cmd
-cd CFBenchmark/codes
+cd CFBenchmark-basic/src
 python -m run.py
 ```
-You can enter ```codes/run.py``` to modify the parameters in it to make the code running path meet your requirements.
+You can enter ```CFBenchmark-basic/src/run.py``` to modify the parameters in it to make the code running path meet your requirements.
 ```py
 from CFBenchmark import CFBenchmark
 if __name__=='__main__':
@@ -132,8 +120,7 @@ if __name__=='__main__':
     response_path='../cfbenchmark-response'#PATH TO RESERVE THE RESPONSE OF YOUR MODEL
     scores_path='../cfbenchmark-scores'	#PATH TO RESERVE THE SCORE OF YOUR MODEL
     embedding_model_path='../bge-zh-v1.5' #PASS YOUR OWN PATH OF BGE-ZH-V1.5
-    benchmark_path='../cfbenchmark' #DEFAULT PATH
-    data_source_type='offline'#online or offline
+    benchmark_path='../data' #DEFAULT PATH
 
     #generate Class CFBenchmark
     cfb=CFBenchmark(
@@ -147,7 +134,6 @@ if __name__=='__main__':
         scores_path=scores_path,
         embedding_model_path=embedding_model_path,
         benchmark_path=benchmark_path,
-        data_source_type=data_source_type
     )
     
     cfb.generate_model()# TO GET RESPONSE FROM YOUR MODEL
@@ -168,8 +154,7 @@ class CFBenchmark:
                  response_path,
                  scores_path,
                  embedding_model_path,
-                 benchmark_path,
-                 data_source_type
+                 benchmark_path
                  ) -> None:
 ```
 
@@ -177,20 +162,20 @@ class CFBenchmark:
 * You can set test-type to 'zero-shot' or 'few-shot' to do different evaluations.
 * embedding_model_path is set for bzh-zh-v1.5 for calculating cosine-similarity. 
 * You can modify the hyperparameters in CFBenchmark.generate_model() for text generations. 
-* We provide CFBenchmark saved as a Dataset data type in both Hugging Face and Github. If you want to use an offline version of the benchmark, set the parameter data_source_type to offline````. If you want to use the online version of the benchmark, set the parameterdata_source_typetoonline```.
+* We provide CFBenchmark saved as a Dataset data type in both Hugging Face and Github.
 
 ### OpenFinData
 
-In the `./OpenFinData` directory, we have prepared the code and data for testing and evaluation. The design of the evaluation code is similar to Fineva1.0, where the mode of calling the evaluation model is defined through `./OpenFinData/src/evaluator`, and the key parameters are configured and experimented with through the bash files in `OpenFinData/run_scripts`.
+In the `CFBenchmark-OpenFinData` directory, we have prepared the code and data for testing and evaluation. The design of the evaluation code is similar to Fineva1.0, where the mode of calling the evaluation model is defined through `CFBenchmark-OpenFinData/src/evaluator`, and the key parameters are configured and experimented with through the bash files in `CFBenchmark-OpenFinData/run_scripts`.
 
 To run the evaluation, you can execute the following code in the command line:
 
 ```cmd
-cd CFBenchmark/OpenFinData/run_scripts
+cd CFBenchmark-OpenFinData/run_scripts
 sh run_baichuan2_7b.sh
 ```
 
-It's important to note that since the evaluation process of OpenFinData involves subjective judgement, our evaluation framework utilizes Wenxin Yiyan to evaluate financial interpretation and analysis problems as well as financial compliance issues. To smoothly use the Wenxin Yiyan API for evaluation, please set `BAIDU_API_KEY` and `BAIDU_SECRET_KEY` in your environment variables, so that the `get_access_token` function in `./OpenFinData/src/get_score.py` can run successfully.
+It's important to note that since the evaluation process of OpenFinData involves subjective judgement, our evaluation framework utilizes ERNIE to evaluate financial interpretation and analysis problems as well as financial compliance issues. To smoothly use the ERNIE API for evaluation, please set `BAIDU_API_KEY` and `BAIDU_SECRET_KEY` in your environment variables, so that the `get_access_token` function in `./OpenFinData/src/get_score.py` can run successfully.
 
 ```Py
 def get_access_token():
@@ -230,8 +215,8 @@ The best scores of LLMs(considering zero-shot and few-shot), as well as which of
 | Model              | Size | Company   | Product   | R.Avg     | Sector    | Event     | Sentiment | C.Avg     | Summary   | Risk      | Suggestion | G.Avg     | Avg       |
 | ------------------ | ---- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | ---------- | --------- | --------- |
 | HUMAN              | -    | 0.931     | 0.744     | 0.838     | 0.975     | 0.939     | 0.912     | 0.942     | 1.000     | 1.000     | 1.000      | 1.000     | 0.927     |
-| ChatGPT            | 20B  | 0.797     | 0.198     | 0.498     | 0.453     | 0.458     | 0.425     | 0.455     | 0.593     | 0.541     | 0.771      | 0.635     | 0.529     |
-| ERNIE-Bot          | 260B | 0.807     | 0.300     | 0.533     | 0.408     | 0.350     | 0.186     | 0.315     | 0.715     | 0.590     | 0.716      | 0.673     | 0.507     |
+| ChatGPT            | -    | 0.797     | 0.198     | 0.498     | 0.453     | 0.458     | 0.425     | 0.455     | 0.593     | 0.541     | 0.771      | 0.635     | 0.529     |
+| ERNIE-Bot          | -    | 0.807     | 0.300     | 0.533     | 0.408     | 0.350     | 0.186     | 0.315     | 0.715     | 0.590     | 0.716      | 0.673     | 0.507     |
 | ERNIE-Bot-4        | -    | 0.819     | 0.417     | 0.618     | 0.418     | 0.358     | 0.375     | 0.384     | 0.721     | 0.629     | 0.718      | 0.689     | 0.564     |
 | Falcon-7B          | 7B   | 0.671     | 0.168     | 0.420     | 0.169     | 0.132     | 0.250     | 0.184     | 0.302     | 0.301     | 0.246      | 0.283     | 0.296     |
 | Falcon-7B-chat     | 7B   | 0.582     | 0.046     | 0.314     | 0.112     | 0.142     | 0.153     | 0.135     | 0.307     | 0.299     | 0.258      | 0.288     | 0.246     |
@@ -274,7 +259,7 @@ The best scores of LLMs(considering zero-shot and few-shot), as well as which of
 
 # Acknowledgements
 
-CFBenchmark has referred to the following open-source projects. We want to express our gratitude  to the researchers of the projects.
+CFBenchmark has referred to the following open-source projects. We want to express our gratitude and respect to the researchers of the projects.
 
 - tiiuae/falcon LLM series(https://huggingface.co/tiiuae/falcon-7b)
 - bigscience/bloomz LLM series(https://huggingface.co/bigscience/bloomz-7b1)
@@ -295,9 +280,9 @@ CFBenchmark has referred to the following open-source projects. We want to expre
     - In various scenarios of Chinese financial usage, propose more evaluation tasks to enrich the CFBenchmark series.
 
 # License
-CFBenchmark is a research preview, subject to the Terms of Use of the data generated by OpenAI. Please contact us if you find any potential violations. The code is released under the Apache License 2.0. 
+CFBenchmark is a research preview intended for non-commercial use only, subject to the Terms of Use of the data generated by OpenAI. Please contact us if you find any potential violations. The code is released under the Apache License 2.0. 
 
-### Thanks To Our Contributors :
+# Thanks To Our Contributors :
 <a href="https://github.com/TongjiFinLab/CFBenchmark/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=TongjiFinLab/CFBenchmark" />
 </a>
@@ -307,7 +292,7 @@ CFBenchmark is a research preview, subject to the Terms of Use of the data gener
 ```bibtex
 @misc{lei2023cfbenchmark,
       title={{CFBenchmark}: Chinese Financial Assistant Benchmark for Large Language Model}, 
-      author={Lei, Yang and Li, Jiangtong and Cheng, Dawei and Ding, Zhijun and Jiang, Changjun},
+      author={Lei, Yang and Li, Jiangtong and Jiang, Ming and Hu, Junjie and Cheng, Dawei and Ding, Zhijun and Jiang, Changjun},
       year={2023},
       eprint={2311.05812},
       archivePrefix={arXiv},

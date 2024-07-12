@@ -19,8 +19,7 @@ class CFBenchmark:
                  response_path,
                  scores_path,
                  embedding_model_path,
-                 benchmark_path,
-                 data_source_type
+                 benchmark_path
                  ) -> None:
         self.model_path=model_path
 
@@ -36,8 +35,7 @@ class CFBenchmark:
         self.test_type=test_type
         self.response_path=response_path
         self.scores_path=scores_path
-        self.embedding_model_path=embedding_model_path
-        self.data_source_type=data_source_type       
+        self.embedding_model_path=embedding_model_path 
         self.benchmark_path=benchmark_path
 
         self.fewshot_text={}
@@ -158,10 +156,7 @@ class CFBenchmark:
             os.makedirs(save_dir)
         for item in self.classifications:
             print('dealing {}'.format(item))
-            if self.data_source_type=='offline':
-                dataset=load_from_disk(self.benchmark_path)
-            else:
-                dataset=load_dataset(self.benchmark_path)
+            dataset=load_from_disk(self.benchmark_path)
             dataset=dataset[item]
             df=dataset.to_pandas()
             df['output']=df.apply(lambda row: self.get_row_response(self.model,self.tokenizer,row,item,self.test_type),
