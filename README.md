@@ -18,7 +18,7 @@ Welcome to **CFBenchmark**
 
 In recent years, with the rapid development of Large Language Models~(LLMs), outstanding performance has been achieved in various tasks by existing LLMs. However, we notice that there is currently a limited amount of benchmarks focused on assessing the performance of LLMs in specific domains. 
 
-The "InternLM·JiShi" Chinese Financial Evaluation Benchmark (CFBenchmark) basic version consists of data from [CFBenchmark-Basic](https://huggingface.co/datasets/TongjiFinLab/CFBenchmark) and [OpenFinData](https://github.com/open-compass/OpenFinData), focusing on evaluating the capabilities and safety of related large models in practical financial applications in the following aspects:
+The "InternLM·JiShi" Chinese Financial Evaluation Benchmark (CFBenchmark) basic version consists of data from [CFBenchmark-Basic](https://huggingface.co/datasets/TongjiFinLab/CFBenchmark) and [CFBenchmark-OpenFinData](https://github.com/open-compass/OpenFinData), focusing on evaluating the capabilities and safety of related large models in practical financial applications in the following aspects:
 * Financial Natural Language Processing, mainly focusing on the model's understanding and generation capabilities of financial texts, such as financial entity recognition, industry classification, research report summarization, and risk assessment;
 * Financial Scenario Calculation, focusing on assessing the model's calculation and reasoning capabilities in specific financial scenarios, such as risk assessment and investment portfolio optimization;
 * Financial Analysis and Interpretation Tasks, testing the model's ability to understand complex financial reports, predict market trends, and assist in decision-making;
@@ -34,7 +34,7 @@ In the future, the "InternLM·JiShi" Chinese Financial Evaluation Benchmark will
 
 # News
 
-[2024.03.17] Added the evaluation on the financial dataset [OpenFinData](https://github.com/open-compass/OpenFinData) and released an implementation of the evaluation of the subjective questions in this dataset. In addition, we also reported the test results of 9 LLMs on the OpenFinData dataset.
+[2024.03.17] Added the evaluation on the financial dataset [CFBenchmark-OpenFinData](https://github.com/open-compass/OpenFinData) and released an implementation of the evaluation of the subjective questions in this dataset. In addition, we also reported the test results of 9 LLMs on the OpenFinData dataset.
 
 > [OpenFinData](https://github.com/open-compass/OpenFinData) is publicly released by EastMoney.com and Shanghai AI Lab. See details  [Github](https://github.com/open-compass/opencompass/blob/main/configs/datasets/OpenFinData/OpenFinData.md).
 
@@ -98,14 +98,14 @@ Below are the steps for quick installation.
 
 ### CFBenchmark-Basic
 
-We have prepared the testing and evaluation codes for you in repo ```CFBenchmark-basic/src```.  
+We have prepared the testing and evaluation codes for you in repo ```CFBenchmark-Basic/src```.  
 
 To begin the evaluation, you can run the following code from the command line:
 ```cmd
-cd CFBenchmark-basic/src
+cd CFBenchmark-Basic/src
 python -m run.py
 ```
-You can enter ```CFBenchmark-basic/src/run.py``` to modify the parameters in it to make the code running path meet your requirements.
+You can enter ```CFBenchmark-Basic/src/run.py``` to modify the parameters in it to make the code running path meet your requirements.
 ```py
 from CFBenchmark import CFBenchmark
 if __name__=='__main__':
@@ -164,7 +164,7 @@ class CFBenchmark:
 * You can modify the hyperparameters in CFBenchmark.generate_model() for text generations. 
 * We provide CFBenchmark saved as a Dataset data type in both Hugging Face and Github.
 
-### OpenFinData
+### CFBenchmark-OpenFinData
 
 In the `CFBenchmark-OpenFinData` directory, we have prepared the code and data for testing and evaluation. The design of the evaluation code is similar to Fineva1.0, where the mode of calling the evaluation model is defined through `CFBenchmark-OpenFinData/src/evaluator`, and the key parameters are configured and experimented with through the bash files in `CFBenchmark-OpenFinData/run_scripts`.
 
@@ -175,7 +175,7 @@ cd CFBenchmark-OpenFinData/run_scripts
 sh run_baichuan2_7b.sh
 ```
 
-It's important to note that since the evaluation process of OpenFinData involves subjective judgement, our evaluation framework utilizes ERNIE to evaluate financial interpretation and analysis problems as well as financial compliance issues. To smoothly use the ERNIE API for evaluation, please set `BAIDU_API_KEY` and `BAIDU_SECRET_KEY` in your environment variables, so that the `get_access_token` function in `./OpenFinData/src/get_score.py` can run successfully.
+It is important to note that since the evaluation process of OpenFinData involves subjective judgement, our evaluation framework utilizes ERNIE to evaluate financial interpretation and analysis problems as well as financial compliance issues. To smoothly use the ERNIE API for evaluation, please set `BAIDU_API_KEY` and `BAIDU_SECRET_KEY` in your environment variables, so that the `get_access_token` function in `CFBenchmark-OpenFinData/src/get_score.py` can run successfully.
 
 ```Py
 def get_access_token():
@@ -198,64 +198,77 @@ def get_access_token():
 
 # Performance of Existing LLMs
 
-We utilize two types of metrics to evaluate the performance of LLMs in the financial domain on our CFBenchmark. 
+We utilize different metrics to evaluate the performance of LLMs in the financial domain on our CFBenchmark. 
 
-For recognition and classification tasks, we employ the **F1 score** as the evaluation metric, which balances precision and recall. 
+For recognition and classification tasks in CFBenchmark-Basic, we employ the **F1 score** as the evaluation metric, which balances precision and recall. 
 
-For the generation tasks, we utilize **cosine similarity** between the vector representation of ground truth and the generated answer to measure the generation ability. 
+For the generation tasks in CFBenchmark-Basic, we utilize **cosine similarity** between the vector representation (generated by **bge-zh-v1.5**) of ground truth and the generated answer to measure the generation ability. 
 
-Since there are usually different expressions with similar meanings in our generation tasks, simply employing Rough-Score or BULE-score is not reasonable. 
+For the knowledge, calculation, and identification in CFBenchmark-OpenFinData, we calculate the accuracy of multi-choice question.
 
-Specifically, the **bge-zh-v1.5** is assigned as the oracle model to generate the sentence embedding. We calculate evaluation scores for each sub-task individually and provide the average score for each category.
+For the explanation, analysis, and compliance in CFBenchmark-OpenFinData, we exploit the ERNIE-Bot-4 as socrer to judge the correctness of generated answer with ground truth. 
 
-The best scores of LLMs(considering zero-shot and few-shot), as well as which of our model,  are demonstrated below:
+The performance of LLMs are demonstrated below:
 
 
 ## CFBenchmark-Basic
-| Model              | Size | Company   | Product   | R.Avg     | Sector    | Event     | Sentiment | C.Avg     | Summary   | Risk      | Suggestion | G.Avg     | Avg       |
-| ------------------ | ---- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | ---------- | --------- | --------- |
-| HUMAN              | -    | 0.931     | 0.744     | 0.838     | 0.975     | 0.939     | 0.912     | 0.942     | 1.000     | 1.000     | 1.000      | 1.000     | 0.927     |
-| ChatGPT            | -    | 0.797     | 0.198     | 0.498     | 0.453     | 0.458     | 0.425     | 0.455     | 0.593     | 0.541     | 0.771      | 0.635     | 0.529     |
-| ERNIE-Bot          | -    | 0.807     | 0.300     | 0.533     | 0.408     | 0.350     | 0.186     | 0.315     | 0.715     | 0.590     | 0.716      | 0.673     | 0.507     |
-| ERNIE-Bot-4        | -    | 0.819     | 0.417     | 0.618     | 0.418     | 0.358     | 0.375     | 0.384     | 0.721     | 0.629     | 0.718      | 0.689     | 0.564     |
-| Falcon-7B          | 7B   | 0.671     | 0.168     | 0.420     | 0.169     | 0.132     | 0.250     | 0.184     | 0.302     | 0.301     | 0.246      | 0.283     | 0.296     |
-| Falcon-7B-chat     | 7B   | 0.582     | 0.046     | 0.314     | 0.112     | 0.142     | 0.153     | 0.135     | 0.307     | 0.299     | 0.258      | 0.288     | 0.246     |
-| bloomz-7B1         | 7B   | 0.765     | 0.166     | 0.465     | 0.252     | 0.154     | 0.394     | 0.267     | 0.451     | 0.371     | 0.462      | 0.428     | 0.387     |
-| bloomz-7Bt1-mt     | 7B   | 0.751     | 0.157     | 0.454     | 0.087     | 0.182     | 0.380     | 0.216     | 0.425     | 0.379     | 0.396      | 0.400     | 0.357     |
-| Qwen-7B            | 7B   | 0.780     | 0.357     | 0.569     | 0.480     | 0.335     | 0.379     | 0.398     | 0.750     | 0.505     | 0.713      | 0.656     | 0.541     |
-| Qwen-Chat-7B       | 7B   | 0.763     | 0.360     | 0.562     | 0.400     | 0.367     | 0.265     | 0.344     | 0.548     | 0.307     | 0.379      | 0.411     | 0.439     |
-| Qwen-14B           | 14B  | 0.805     | 0.421     | 0.613     | 0.481     | 0.350     | 0.385     | 0.405     | 0.754     | 0.608     | 0.717      | 0.693     | 0.570     |
-| Qwen-Chat-14B      | 14B  | 0.814     | 0.442     | 0.628     | 0.382     | 0.400     | 0.350     | 0.377     | 0.732     | 0.478     | 0.736      | 0.649     | 0.551     |
-| ChatGLM2-6B        | 6B   | 0.747     | 0.313     | 0.530     | 0.285     | 0.300     | 0.357     | 0.314     | 0.657     | 0.454     | 0.671      | 0.594     | 0.479     |
-| Baichuan2-7B-Base  | 7B   | 0.672     | 0.340     | 0.506     | 0.342     | 0.490     | 0.480     | 0.437     | 0.739     | 0.619     | 0.751      | 0.703     | 0.549     |
-| Baichuan2-7B-Chat  | 7B   | 0.757     | 0.402     | 0.579     | 0.425     | 0.475     | 0.323     | 0.408     | 0.725     | 0.648     | 0.732      | 0.702     | 0.563     |
-| Baichuan2-13B-Base | 13B  | 0.781     | 0.330     | 0.555     | 0.436     | 0.496     | 0.477     | 0.470     | 0.725     | 0.503     | 0.747      | 0.658     | 0.561     |
-| Baichuan2-13B-Chat | 13B  | 0.797     | 0.314     | 0.556     | 0.472     | 0.507     | 0.387     | 0.455     | 0.739     | 0.634     | 0.746      | 0.706     | 0.572     |
-| InternLM-7B        | 7B   | 0.612     | 0.233     | 0.423     | 0.266     | 0.311     | 0.328     | 0.302     | 0.378     | 0.336     | 0.379      | 0.364     | 0.363     |
-| InternLM-7B-Chat   | 7B   | 0.632     | 0.261     | 0.447     | 0.272     | 0.364     | 0.399     | 0.345     | 0.363     | 0.270     | 0.353      | 0.329     | 0.374     |
-| InternLM-20B       | 20B  | 0.809     | 0.358     | 0.583     | 0.500     | 0.427     | 0.417     | 0.448     | 0.706     | 0.653     | 0.728      | 0.695     | 0.575     |
-| InternLM-20B-Chat  | 20B  | 0.488     | 0.362     | 0.425     | 0.323     | 0.327     | 0.370     | 0.340     | 0.706     | 0.578     | 0.762      | 0.662     | 0.476     |
-| CFGPT1-stf-LoRA    | 7B   | 0.820     | 0.414     | 0.617     | 0.569     | 0.729     | 0.769     | 0.689     | 0.745     | 0.584     | 0.609      | 0.646     | 0.650     |
-| CFGPT1-sft-Full    | 7B   | **0.836** | **0.476** | **0.656** | **0.700** | **0.808** | **0.829** | **0.779** | **0.798** | **0.669** | **0.808**  | **0.758** | **0.731** |
-| CFGPT2-7B          | 7B   | **0.834** | **0.470** | **0.652** | **0.644** | **0.750** | **0.793** | **0.729** | **0.801** | **0.692** | **0.790**  | **0.761** | **0.714** |
-| CFGPT2-20B         | 20B  | **0.891** | **0.501** | **0.696** | **0.722** | **0.825** | **0.865** | **0.806** | **0.825** | **0.727** | **0.823**  | **0.792** | **0.755** |
+| Model               | Size | Company   | Product   | R.Avg     | Sector    | Event     | Sentiment | C.Avg     | Summary   | Risk      | Suggestion | G.Avg     | Avg       |
+| ------------------  | ---- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | --------- | ---------- | --------- | --------- |
+| GPT-3.5             | -    | 79.7      | 19.8      | 49.8      | 45.3      | 45.8      |  42.5     | 45.5      | 59.3      | 54.1      | 77.1       | 63.5      | 52.9     |
+| GPT-4               | -    | 83.3      | 38.2      | 60.8      | 48.2      | 50.1      |  49.9     | 49.4      | 65.3      | 60.2      | 79.2       | 68.2      | 59.4     |
+| ERNIE-Bot-3.5       | -    | 80.7      | 30.0      | 53.3      | 40.8      | 35.0      |  18.6     | 31.5      | 71.5      | 59.0      | 71.6       | 67.3      | 50.7     |
+| ERNIE-Bot-4         | -    | 81.9      | 41.7      | 61.8      | 41.8      | 35.8      |  37.5     | 38.4      | 72.1      | 62.9      | 71.8       | 68.9      | 56.4     |
+| ChatGLM2-6B         | 6B   | 74.7      | 31.3      | 53.0      | 28.5      | 30.0      |  35.7     | 31.4      | 65.7      | 45.4      | 67.1       | 59.4      | 47.9     |
+| ChatGLM3-6B         | 6B   | 75.1      | 25.2      | 50.2      | 33.5      | 32.7      |  39.7     | 35.3      | 68.4      | 53.6      | 70.5       | 64.2      | 49.9     |
+| GLM4-9B-Chat        | 9B   | 81.3      | 26.1      | 53.7      | 49.6      | 51.5      |  47.6     | 49.6      | 73.5      | 62.4      | 72.6       | 69.5      | 57.6     |
+| Qwen-Chat-7B        | 7B   | 76.3      | 36.0      | 56.2      | 40.0      | 36.7      |  26.5     | 34.4      | 54.8      | 30.7      | 37.9       | 41.1      | 43.9     |
+| Qwen1.5-Chat-7B     | 7B   | 83.5      | 35.3      | 59.4      | 34.3      | 37.5      |  51.6     | 41.1      | 73.7      | 58.7      | 73.1       | 68.5      | 56.3     |
+| Qwen2-Chat-7B       | 7B   | 82.4      | 34.8      | 58.6      | 54.4      | 49.9      |  41.1     | 48.5      | 75.0      | 55.9      | 76.9       | 69.2      | 58.8     |
+| Baichuan2-7B-Chat   | 7B   | 75.7      | 40.2      | 57.9      | 42.5      | 47.5      |  32.3     | 40.8      | 72.5      | 64.8      | 73.2       | 70.2      | 56.3     |
+| Baichuan2-13B-Chat  | 13B  | 79.7      | 31.4      | 55.6      | 47.2      | 50.7      |  38.7     | 45.5      | 73.9      | 63.4      | 74.6       | 70.6      | 57.2     |
+| InternLM2-7B-Chat   | 7B   | 75.7      | 19.5      | 47.6      | 46.4      | 28.4      |  42.2     | 39.0      | 73.7      | 54.3      | 74.9       | 67.6      | 51.4     |
+| InternLM2-20B-Chat  | 20B  | 74.2      | 27.6      | 50.9      | 48.4      | 32.4      |  37.4     | 39.4      | 73.2      | 58.0      | 74.1       | 68.4      | 52.9     |
+| InternLM2.5-7B-Chat | 7B   | 75.2      | 24.3      | 49.8      | 53.1      | 34.3      |  45.7     | 44.4      | 74.5      | 57.0      | 73.2       | 68.2      | 54.1     |
 
-## OpenFinData
+## CFBenchmark-OpenFinData
 
-| Model              | Size | Knowledge | Caluation | Explanation | Identification | Analysis | Compliance | Average | 
-| ------------------ | ---- | -------   | ------    | -----       | ---------      | -----    | -------    | -----   |
-| ERNIE-Bot-3.5      | -    | 78.0      | 70.4      | 82.1        | 75.3           | 77.7     | 36.7       | 70.0    | 
-| ERNIE-Bot-4        | -    | **87.3**  | **73.6**  | **84.3**    | **77.0**       | **79.1** | 37.3       |**73.1** | 
-| InternLM-7B        | 7B   | 65.3      | 45.8      | 71.4        | 62.5           | 59.2     | 37.2       | 56.9    | 
-| ChatGLM2-6B        | 6B   | 62.4      | 37.2      | 70.8        | 59.2           | 58.3     | 38.7       | 54.4    | 
-| Qwen-Chat-7B       | 7B   | 71.3      | 40.5      | 71.4        | 58.6           | 51.3     | 40.0       | 55.5    | 
-| Qwen-Chat-14B      | 14B  | 78.0      | 57.6      | 75.6        | 71.6           | 59.3     | 40.6       | 63.8    | 
-| Baichuan2-7B-Chat  | 7B   | 46.2      | 37.0      | 76.5        | 60.2           | 55.0     | 28.7       | 50.6    | 
-| Baichuan2-13B-Chat | 13B  | 69.3      | 39.5      | 75.3        | 65.7           | 62.0     | 31.3       | 57.2    | 
-| InternLM2-7B       | 7B   | 70.2      | 39.9      | 73.4        | 62.8           | 61.4     | 39.5       | 57.8    |
-| InternLM2-20B      | 20B  | 76.4      | 52.6      | 76.3        | 66.2           | 63.9     | 42.1       | 62.9    |
-| CFGPT2-7B          | 7B   | 81.9      | 62.8      | 75.2        | 71.3           | 64.1     | 68.2       | 70.5    |
-| CFGPT2-20B         | 20B  | 84.6      | 66.5      | 78.1        | 75.9           | 66.0     | **71.9**   | 73.8    |
+| Model               | Size | Knowledge | Caluation | Explanation | Identification | Analysis | Compliance | Average | 
+| ------------------  | ---- | -------   | ------    | -----       | ---------      | -----    | -------    | -----   |
+| GPT-3.5             | -    | 77.2      | 68.8      | 81.9        | 76.3           | 75.1     | 35.8       | 63.9    | 
+| GPT-4               | -    | 89.2      | 77.2      | 84.4        | 76.9           | 82.5     | 39.2       | 74.9    | 
+| ERNIE-Bot-3.5       | -    | 78.0      | 70.4      | 82.1        | 75.3           | 77.7     | 36.7       | 70.0    | 
+| ERNIE-Bot-4         | -    | 87.3      | 73.6      | 84.3        | 77.0           | 79.1     | 37.3       | 73.1    | 
+| ChatGLM2-6B         | 6B   | 62.4      | 37.2      | 70.8        | 59.2           | 58.3     | 38.7       | 54.4    | 
+| ChatGLM3-6B         | 6B   | 66.5      | 38.0      | 76.5        | 61.5           | 60.1     | 32.0       | 55.8    | 
+| GLM4-9B-Chat        | 9B   | 81.8      | 56.9      | 79.3        | 63.5           | 78.2     | 29.5       | 64.9    | 
+| Qwen-Chat-7B        | 7B   | 71.3      | 40.5      | 71.4        | 58.6           | 51.3     | 40.0       | 55.5    | 
+| Qwen1.5-Chat-7B     | 7B   | 67.3      | 53.9      | 84.6        | 67.7           | 76.8     | 30.0       | 63.3    | 
+| Qwen2-Chat-7B       | 7B   | 82.5      | 61.3      | 84.2        | 69.8           | 80.1     | 19.3       | 66.2    | 
+| Baichuan2-7B-Chat   | 7B   | 46.2      | 37.0      | 76.5        | 60.2           | 55.0     | 28.7       | 50.6    | 
+| Baichuan2-13B-Chat  | 13B  | 69.3      | 39.5      | 75.3        | 65.7           | 62.0     | 31.3       | 57.2    | 
+| InternLM2-7B-Chat   | 7B   | 70.2      | 39.9      | 73.4        | 62.8           | 61.4     | 39.5       | 57.8    |
+| InternLM2-20B-Chat  | 20B  | 76.4      | 52.6      | 76.3        | 66.2           | 63.9     | 42.1       | 62.9    |
+| InternLM2.5-7B-Chat | 7B   | 80.7      | 66.6      | 85.0        | 71.7           | 83.1     | 35.4       | 70.4    |
+
+## CFBenchmark 
+
+| Model               | Size | 金融自然语言 | 金融场景计算 | 金融分析与解读| 金融合规与安全 | 平均 |
+| ------------------  | ---- | ---------- | ---------- | ----------- | ----------- | ---- |
+| GPT-3.5             | -    | 52.9       | 74.1       | 78.5        | 35.8        | 60.3 |
+| GPT-4               | -    | 59.4       | 83.5       | 83.5        | 39.2        | 66.4 |
+| ERNIE-Bot-3.5       | -    | 50.7       | 74.5       | 79.9        | 36.7        | 60.4 |
+| ERNIE-Bot-4         | -    | 56.4       | 82.8       | 81.7        | 37.3        | 64.6 |
+| ChatGLM2-6B         | 6B   | 47.9       | 64.1       | 64.6        | 38.7        | 53.8 |
+| ChatGLM3-6B         | 6B   | 49.9       | 68.2       | 68.3        | 32.0        | 54.6 |
+| GLM4-9B-Chat        | 9B   | 57.6       | 67.4       | 78.8        | 29.5        | 58.3 |
+| Qwen-Chat-7B        | 7B   | 43.9       | 67.1       | 61.4        | 40.0        | 53.1 |
+| Qwen1.5-Chat-7B     | 7B   | 56.3       | 73.2       | 80.7        | 30.0        | 60.0 |
+| Qwen2-Chat-7B       | 7B   | 58.8       | 78.8       | 82.2        | 19.3        | 59.8 |
+| Baichuan2-7B-Chat   | 7B   | 56.3       | 61.0       | 65.8        | 28.7        | 53.0 |
+| Baichuan2-13B-Chat  | 13B  | 57.2       | 70.1       | 68.6        | 31.3        | 56.8 |
+| InternLM2-7B-Chat   | 7B   | 51.4       | 68.8       | 67.4        | 39.5        | 56.8 |
+| InternLM2-20B-Chat  | 20B  | 52.9       | 73.0       | 70.1        | 42.1        | 59.5 |
+| InternLM2.5-7B-Chat | 7B   | 54.1       | 79.1       | 84.0        | 35.4        | 63.2 |
 
 # Acknowledgements
 
